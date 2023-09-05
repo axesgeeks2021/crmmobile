@@ -18,7 +18,7 @@
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
     "react": "18.1.0",
-    "react-native": "0.70.12",
+    "react-native": "^0.70.12",
     "react-native-blob-util": "^0.19.1",
     "react-native-calendars": "^1.1299.0",
     "react-native-document-picker": "^9.0.1",
@@ -31,6 +31,7 @@
     "react-native-signature-canvas": "^4.5.1",
     "react-native-stopwatch-timer": "^0.0.21",
     "react-native-vector-icons": "^10.0.0",
+    "react-native-vision-camera": "^3.0.0",
     "react-native-webview": "^13.3.1",
     "rn-fetch-blob": "^0.12.0"
   },

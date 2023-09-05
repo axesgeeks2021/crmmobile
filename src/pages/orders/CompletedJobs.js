@@ -43,13 +43,14 @@ const CompletedJobs = ({navigation}) => {
     }
 
     useEffect(() => {
-        const subscribe = fetchCompletedOrders()
+        const subscribe = fetchCompletedOrders() 
 
         return () => [subscribe]
     }, [])
 
     return (
-        <View style={{ flex: 1, justifyContent: 'space-between', alignItems: 'center', width }}>
+        <>   
+       <View style={{ flex: 1, justifyContent: 'space-between', alignItems: 'center', width }}>
             <FlatList
                 data={completedJobs}
                 contentContainerStyle={{ overflow: 'hidden', width: "90%" }}
@@ -73,14 +74,17 @@ const CompletedJobs = ({navigation}) => {
                                         <IconM name='email' color="#fff" size={20} /><Text style={[styles.text]}>{item?.to_address?.user?.email}</Text>
                                     </View>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <Icon name='mobile' color="#fff" size={20} /><Text style={[styles.text]}>{item?.to_address?.user?.phone}</Text>
+                                    <Icon name='mobile' color="#fff" size={20} /><Text style={[styles.text]}>{item?.to_address?.user?.phone}</Text>
                                     </View>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <IconI name='time' color="#fff" size={20} /><Text style={[styles.text]}>{item?.order_start_date.split('T')[0]} {item?.order_start_date.split('T')[1].substring(0, item?.order_start_date.split('T')[1].length - 1)}</Text>
+                                    {/*<IconI name='time' color="#fff" size={20} /><Text style={[styles.text]}>{item?.order_start_date.split(' ')[0]} {item?.order_start_date.split(' ')[1].substring(0, item?.order_start_date.split(' ')[1].length - 1)}</Text>*/}
+                                    <IconI name='time' color="#fff" size={20} /><Text style={[styles.text]}>{item?.order_start_date}</Text>
+                                    
                                     </View>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <IconI name='time' color="#fff" size={20} /><Text style={[styles.text]}>{item?.order_end_date.split('T')[0]} {item?.order_end_date.split('T')[1].substring(0, item?.order_end_date.split('T')[1].length - 1)}</Text>
-                                    </View>
+                                    {/*      <IconI name='time' color="#fff" size={20} /><Text style={[styles.text]}>{item?.order_end_date.split(' ')[0]} {item?.order_end_date.split(' ')[1].substring(0, item?.order_end_date.split(' ')[1].length - 1)}</Text>*/}
+                                        <IconI name='time' color="#fff" size={20} /><Text style={[styles.text]}>{item?.order_end_date}</Text>
+                    </View>
                                     <View>
                                     </View>
                                 </View>
@@ -90,7 +94,9 @@ const CompletedJobs = ({navigation}) => {
                 }}
             />
 
-        </View>
+            </View>
+            
+            </>
     )
 }
 const styles = StyleSheet.create({

@@ -140,6 +140,7 @@ android {
        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
      }
 
+   
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion

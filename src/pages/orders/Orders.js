@@ -1,5 +1,5 @@
-import { ScrollView, StyleSheet, Text, View, useWindowDimensions, Image, Button, Animated } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { ScrollView, StyleSheet, Text, View, useWindowDimensions, Image, Button,Animated, TouchableOpacity, Easing } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 
 import Card from "../../components/Card"
 import { useTheme } from 'react-native-paper'
@@ -10,12 +10,12 @@ import Icon from "react-native-vector-icons/Entypo"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
+const Orders = ({ route , navigation}) => {
 
-const Orders = ({ route }) => {
+  const orderId = route.params.id
+  const location = route.params.location
 
-  const orderId = route.params.id;
-
-  console.log('orderid ', orderId)
+  const translationRef = useRef(new Animated.Value(100)).current
 
   const { width } = useWindowDimensions()
 
@@ -23,7 +23,7 @@ const Orders = ({ route }) => {
 
   const [orderDetails, setOrderDetails] = useState([])
 
-  console.log('order details', orderDetails)
+  const [scrollValue, setScrollValue] = useState(false)
 
   const fetchOrder = async () => {
     try {
@@ -50,133 +50,198 @@ const Orders = ({ route }) => {
     }
   }
 
-  // const lastContentOffset = useSharedValue(0);
-  // const isScrolling = useSharedValue(false);
-  // const translateY = useSharedValue(0);
+  const startProject = () => {
+    if((location.latitude).toFixed(2) === (+orderDetails?.to_address?.latitude).toFixed(2) && (location.longitude).toFixed(2) === (+orderDetails?.to_address?.longitude).toFixed(2)){
+      return alert('You to reach to order location!...then start the project')
+    }
+    return navigation.push('upload-site-documents')
+  }
 
-  // const actionBarStyle = useAnimatedStyle(() => {
-  //   return {
-  //     transform: [
-  //       {
-  //         translateY: withTiming(translateY.value, {
-  //           duration: 750,
-  //           easing: Easing.inOut(Easing.ease),
-  //         }),
-  //       },
-  //     ],
-  //   };
-  // });
+  const onScollFunction = () => {
+    Animated.timing(translationRef, {
+      toValue: scrollValue ? 0 : -100,
+      useNativeDriver: true,
+      duration: 250,
+    }).start
+  }
 
-  // const scrollHandler = useAnimatedScrollHandler({
-  //   onScroll: (event) => {
-  //     if (
-  //       lastContentOffset.value > event.contentOffset.y &&
-  //       isScrolling.value
-  //     ) {
-  //       translateY.value = 0;
-  //       console.log("scrolling up");
-  //     } else if (
-  //       lastContentOffset.value < event.contentOffset.y &&
-  //       isScrolling.value
-  //     ) {
-  //       translateY.value = 100;
-  //       console.log("scrolling down");
-  //     }
-  //     lastContentOffset.value = event.contentOffset.y;
-  //   },
-  //   onBeginDrag: (e) => {
-  //     isScrolling.value = true;
-  //   },
-  //   onEndDrag: (e) => {
-  //     isScrolling.value = false;
-  //   },
-  // });
 
-  useEffect(() => {
+ useEffect(() => {
     const subscribe = fetchOrder()
 
     return () => subscribe
   }, [])
 
-
   return (
-    <View style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} >
+    <View style={styles.container}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}  scrollEventThrottle={16}
+    onScroll={(e) => {
+      const scrolling = e.nativeEvent.contentOffset.y
 
-        {/* <View>
-                  <Image style={{ width: width, height: 200 }} source={{ uri: ele?.profile_pic }} resizeMode='cover' />
-                </View> */}
-        <View style={{ paddingHorizontal: 20, paddingVertical: 20 }}>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.to_address?.user?.username}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.to_address?.user?.first_name}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.to_address?.user?.last_name}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.to_address?.user?.phone}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.to_address?.user?.email}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.batteries?.code}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.batteries?.manufacturer}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.batteries?.product_warranty}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.batteries?.title}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.inverter?.rated_output_power}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.inverter?.code}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.inverter?.inverter_type}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.inverter?.rated_output_power}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.inverter_quantity}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.meter_Number}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.meter_Phase}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.monitoring}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.panels?.code}</Text>
-          <Text style={styles.textStyle}>
-            <Icon name='500px' size={24} color="#000" /> {orderDetails?.panels?.manufacturer}</Text>
+      if(scrolling > 100){
+        return setScrollValue(true)
+      }
+      if(scrolling < 100){
+        return setScrollValue(false)
+      }
+    }} >
+        <View style={[styles.card, { width: width - 20 }]}>
+            <View style={[styles.profile, { width: width - 40 }]}>
+                <Text style={{ fontSize: 22, fontWeight: '600' }}>Profile</Text>
+            </View>
+            <View style={[styles.innerCard]}>
+                <Text style={[styles.text]}>{orderDetails?.to_address?.user?.username}</Text>
+                <Text style={[styles.text]}>{orderDetails?.to_address?.user?.first_name.toUpperCase()} {orderDetails?.order?.to_address?.user?.last_name.toUpperCase()}</Text>
+                <Text style={[styles.text]}>{orderDetails?.to_address?.user?.email}</Text>
+                <Text style={[styles.text]}>{orderDetails?.to_address?.user?.phone}</Text>
+            </View>
         </View>
-      </ScrollView>
-      <View >
-        <Button title='Start Project' />
-      </View>
-    </View>
+        <View style={[styles.card, { width: width - 20 }]}>
+            <View style={[styles.profile, { width: width - 40 }]}>
+                <Text style={{ fontSize: 22, fontWeight: '600' }}>Project Details</Text>
+            </View>
+            <View style={[styles.innerCard]}>
+                <Text style={[styles.text]}>{orderDetails?.system_Size}</Text>
+                <Text style={[styles.text]}>{orderDetails?.building_Type}</Text>
+                <Text style={[styles.text]}>{orderDetails?.nmi_no}</Text>
+                <Text style={[styles.text]}>{orderDetails?.company_Name}</Text>
+            </View>
+        </View>
+        <View style={[styles.card, { width: width - 20 }]}>
+            <View style={[styles.profile, { width: width - 40 }]}>
+                <Text style={{ fontSize: 22, fontWeight: '600' }}>Meter Details</Text>
+            </View>
+            <View style={[styles.innerCard]}>
+                <Text style={[styles.text]}>{orderDetails?.monitoring_quantity}</Text>
+                <Text style={[styles.text]}>{orderDetails?.monitoring}</Text>
+                <Text style={[styles.text]}>{orderDetails?.meter_Phase}</Text>
+                <Text style={[styles.text]}>{orderDetails?.meter_Number}</Text>
+            </View>
+        </View>
+        {
+            orderDetails?.assign_to?.map((ele, idx) => {
+                return (
+                    <View style={[styles.card, { width: width - 20 }]} key={idx}>
+                        <View style={[styles.profile, { width: width - 40 }]}>
+                            <Text style={{ fontSize: 22, fontWeight: '600' }}>Assign To {ele?.user_type.toUpperCase()}</Text>
+                        </View>
+                        <View style={[styles.innerCard]}>
+                            <Text style={[styles.text]}>{ele?.username}</Text>
+                            <Text style={[styles.text]}>{ele?.first_name.toUpperCase()} {ele?.last_name.toUpperCase()}</Text>
+                            <Text style={[styles.text]}>{ele?.email}</Text>
+                            <Text style={[styles.text]}>{ele?.phone}</Text>
+                        </View>
+                    </View>
+                )
+            })
+        }
+
+        {/* <View style={[styles.card, { width: width - 20 }]}>
+            <View style={[styles.profile, { width: width - 40 }]}>
+            <Text style={{ fontSize: 22, fontWeight: '600' }}>Assign To {orderDetails?.order?.assign_to?.user_type.toUpperCase()}</Text>                    </View>
+            <View style={[styles.innerCard]}>
+                <Text style={[styles.text]}>{orderDetails?.order?.monitoring_quantity}</Text>
+                <Text style={[styles.text]}>{orderDetails?.order?.monitoring}</Text>
+                <Text style={[styles.text]}>{orderDetails?.order?.meter_Phase}</Text>
+                <Text style={[styles.text]}>{orderDetails?.order?.meter_Number}</Text>
+            </View>
+        </View> */}
+    
+        <View style={[styles.card, { width: width - 20 }]}>
+            <View style={[styles.profile, { width: width - 40 }]}>
+                <Text style={{ fontSize: 22, fontWeight: '600' }}>Battery</Text>
+            </View>
+            <View style={[styles.innerCard]}>
+                <Text style={[styles.text]}>{orderDetails?.batteries?.title}</Text>
+                <Text style={[styles.text]}>{orderDetails?.batteries?.code}</Text>
+                <Text style={[styles.text]}>{orderDetails?.batteries?.total_energy}</Text>
+                <Text style={[styles.text]}>{orderDetails?.batteries?.manufacturer}</Text>
+                <Text style={[styles.text]}>{orderDetails?.batteries?.product_warranty}</Text>
+            </View>
+        </View>
+        <View style={[styles.card, { width: width - 20 }]}>
+            <View style={[styles.profile, { width: width - 40 }]}>
+                <Text style={{ fontSize: 22, fontWeight: '600' }}>Inverter</Text>
+            </View>
+            <View style={[styles.innerCard]}>
+                <Text style={[styles.text]}>{orderDetails?.inverter?.title}</Text>
+                <Text style={[styles.text]}>{orderDetails?.inverter_quantity}</Text>
+                <Text style={[styles.text]}>{orderDetails?.inverter?.code}</Text>
+                <Text style={[styles.text]}>{orderDetails?.inverter?.inverter_type}</Text>
+                <Text style={[styles.text]}>{orderDetails?.inverter?.rated_output_power}</Text>
+                <Text style={[styles.text]}>{orderDetails?.inverter?.manufacturer}</Text>
+                <Text style={[styles.text]}>{orderDetails?.inverter?.product_warranty}</Text>
+            </View>
+        </View>
+        
+        <View style={[styles.card, { width: width - 20 }]}>
+            <View style={[styles.profile, { width: width - 40 }]}>
+                <Text style={{ fontSize: 22, fontWeight: '600' }}>Panels</Text>
+            </View>
+            <View style={[styles.innerCard]}>
+                <Text style={[styles.text]}>{orderDetails?.panels?.title}</Text>
+                <Text style={[styles.text]}>{orderDetails?.panels_quantity}</Text>
+                <Text style={[styles.text]}>{orderDetails?.panels?.code}</Text>
+                <Text style={[styles.text]}>{orderDetails?.panels?.technology}</Text>
+                <Text style={[styles.text]}>{orderDetails?.panels?.product_warranty}</Text>
+                <Text style={[styles.text]}>{orderDetails?.panels?.performance_warranty}</Text>
+            </View>
+        </View>
+        
+    </ScrollView>
+    <Animated.View style={[styles.action, {width: width - 10,opacity: 1, transform: [{translateY: scrollValue ? 0 : 100}]}]}>
+    <TouchableOpacity onPress={startProject} >
+        <Text style={[styles.actionItem]}>Start Project</Text>
+    </TouchableOpacity>
+    </Animated.View>
+</View>
+
   )
 }
-
 const styles = StyleSheet.create({
-  textStyle: {
+  container: {
+      flex: 1,
+      // justifyContent: 'center',
+      alignItems: 'center',
+      paddingVertical: 10
+  },
+  card: {
+      marginHorizontal: 'auto',
+      elevation: 10,
+      backgroundColor: "#003F91",
+      marginVertical: 5
+  },
+  profile: {
+      backgroundColor: '#fff',
+      padding: 5,
+      alignSelf: 'center',
+      marginVertical: 10
+  },
+  innerCard: {
+      padding: 20
+  },
+  text: {
+      color: '#fff',
+      fontSize: 18,
+      marginVertical: 2,
+  },
+  secondProfile : {
+      backgroundColor: "#B9D6F2",
+  },
+  
+  action: {
+    flexDirection: "row",
+    borderRadius: 4,
+    padding: 10,
+    position: "absolute",
+    bottom: 5,
+    backgroundColor: "#4B88A2",
+    justifyContent: "space-around",
+  },
+  actionItem: {
+    color: "#fff",
     fontSize: 26,
-  }
+  },
 })
-
 export default Orders
 
-
-{/* <ScrollView>
-        <Bar title="Photos" number={0} autoNumber="auto 0" errormsg="pending mandatory * photos" icon={<Icon name='camera' size={30} color="green" />} />
-        <Bar title="Documents & Forms" number={0} autoNumber="" errormsg="pending electrical" icon={<Icon name='camera' size={30} color="green" />} />
-        <Bar title="Photos" number={0} autoNumber="auto 0" errormsg="pending mandatory * photos" icon={<Icon name='camera' size={30} color="green" />} />
-        <Bar title="Photos" number={0} autoNumber="auto 0" errormsg="pending mandatory * photos" icon={<Icon name='camera' size={30} color="green" />} />
-        <Bar title="Photos" number={0} autoNumber="auto 0" errormsg="pending mandatory * photos" icon={<Icon name='camera' size={30} color="green" />} />
-        <Bar title="Photos" number={0} autoNumber="auto 0" errormsg="pending mandatory * photos" icon={<Icon name='camera' size={30} color="green" />} />
-        <Bar title="Photos" number={0} autoNumber="auto 0" errormsg="pending mandatory * photos" icon={<Icon name='camera' size={30} color="green" />} />
-        <Bar title="Photos" number={0} autoNumber="auto 0" errormsg="pending mandatory * photos" icon={<Icon name='camera' size={30} color="green" />} />
-        <Bar title="Photos" number={0} autoNumber="auto 0" errormsg="pending mandatory * photos" icon={<Icon name='camera' size={30} color="green" />} />
-        <Bar title="Photos" number={0} autoNumber="auto 0" errormsg="pending mandatory * photos" icon={<Icon name='camera' size={30} color="green" />} />
-        <Bar title="Photos" number={0} autoNumber="auto 0" errormsg="pending mandatory * photos" icon={<Icon name='camera' size={30} color="green" />} />
-        <Bar title="Photos" number={0} autoNumber="auto 0" errormsg="pending mandatory * photos" icon={<Icon name='camera' size={30} color="green" />} />
-        <Bar title="Photos" number={0} autoNumber="auto 0" errormsg="pending mandatory * photos" icon={<Icon name='camera' size={30} color="green" />} />
-        <Bar title="Photos" number={0} autoNumber="auto 0" errormsg="pending mandatory * photos" icon={<Icon name='camera' size={30} color="green" />} />
-        <Bar title="Photos" number={0} autoNumber="auto 0" errormsg="pending mandatory * photos" icon={<Icon name='camera' size={30} color="green" />} />
-      </ScrollView> */}

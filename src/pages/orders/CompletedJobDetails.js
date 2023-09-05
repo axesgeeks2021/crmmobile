@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
-const CompletedJobDetails = () => {
+const CompletedJobDetails = ({route}) => {
 
     const { width } = useWindowDimensions()
 
@@ -150,8 +150,8 @@ const CompletedJobDetails = () => {
                         <Text style={{ fontSize: 22, fontWeight: '600' }}>Working Details</Text>
                     </View>
                     <View style={[styles.innerCard]}>
-                        <Text style={[styles.text]}>{completedJobs?.order?.order_start_date.split('T')[0]} {completedJobs?.order?.order_start_date.split('T')[1].substring(0, completedJobs?.order?.order_start_date.split('T')[1].length - 1)}</Text>
-                        <Text style={[styles.text]}>{completedJobs?.order?.order_end_date.split('T')[0]} {completedJobs?.order?.order_end_date.split('T')[1].substring(0, completedJobs?.order?.order_end_date.split('T')[1].length - 1)}</Text>
+                       {/* <Text style={[styles.text]}>{completedJobs?.order?.order_start_date.split('T')[0]} {completedJobs?.order?.order_start_date.split('T')[1].substring(0, completedJobs?.order?.order_start_date.split('T')[1].length - 1)}</Text>
+            <Text style={[styles.text]}>{completedJobs?.order?.order_end_date.split('T')[0]} {completedJobs?.order?.order_end_date.split('T')[1].substring(0, completedJobs?.order?.order_end_date.split('T')[1].length - 1)}</Text> */}
                         <Text style={[styles.text]}>{completedJobs?.working_hour}</Text>
                     </View>
                 </View>
