@@ -34,13 +34,12 @@ const Login = ({navigation}) => {
 
             const res = await fetch("http://solar365.co.in/login/", requestOptions)
             const data = await res.json()
-            console.log(data)
             
             if(data.message == "Success"){
                 await AsyncStorage.setItem('auth', JSON.stringify(data))
                 return navigation.navigate('bottomNavigation')
             }
-
+            return alert(data.message)
             
         } catch (error) {
             console.log(error)
@@ -74,7 +73,7 @@ const Login = ({navigation}) => {
                             style={styles.input}
                             value={email}
                             onChangeText={text => setEmail(text)}
-                            placeholder="Email"
+                            placeholder="User Id"
                             placeholderTextColor="#999"
                         />
                     </View>
@@ -98,7 +97,7 @@ const Login = ({navigation}) => {
 
 
                 }}>Don't have an account. Please Register Here</Text>
-                <Button onPress={() => setShowModal(true)} mode='contained' style={{ backgroundColor: theme.colors.darkGreen, borderRadius: 0 }} >Click Here</Button>
+                <Button onPress={() => navigation.navigate('register')} mode='contained' style={{ backgroundColor: theme.colors.darkGreen, borderRadius: 0 }} >Click Here</Button>
             </View>
             <Modal transparent={false} visible={showModal}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

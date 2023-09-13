@@ -24,6 +24,7 @@ import Signature from './src/pages/Signature'
 import Test from './src/pages/test/Test'
 import GetLocation from './src/pages/GetLocation'
 import UploadSiteDocuments from './src/pages/orders/UploadSiteDocuments'
+import Camera from './src/pages/camera/Camera'
 
 const Stack = createNativeStackNavigator()
 
@@ -48,6 +49,7 @@ const App = () => {
           <Stack.Screen name='upload-site-documents' component={UploadSiteDocuments} options={{ title: 'Project Start' }} />
           <Stack.Screen name='signature' component={Signature} options={{ title: 'Signature' }} />
           <Stack.Screen name='test' component={Test} options={{ title: 'Test' }} />
+          <Stack.Screen name='camera' component={Camera} options={{ title: 'Camera' }} />
           <Stack.Screen name='change-password' component={ChangePassword} options={{ title: 'Change Password' }} />
           <Stack.Screen name='forgot-password' component={ForgotPassword} options={{ title: 'Forgot Password' }} />
         </Stack.Navigator>

@@ -3,7 +3,8 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import Card from "../../components/Card"
 import { useTheme } from 'react-native-paper'
-import Bar from '../../components/Bar'
+import Bar from '../../components/Bar';
+
 
 import Icon from "react-native-vector-icons/Entypo"
 
@@ -22,8 +23,13 @@ const Orders = ({ route , navigation}) => {
   const theme = useTheme()
 
   const [orderDetails, setOrderDetails] = useState([])
-
   const [scrollValue, setScrollValue] = useState(false)
+
+  // TIme component states
+  const [isTimerStart, setIsTimerStart] = useState(false);
+  const [timerDuration, setTimerDuration] = useState(90000);
+  const [resetTimer, setResetTimer] = useState(false);
+  const [resetStopwatch, setResetStopwatch] = useState(false);
 
   const fetchOrder = async () => {
     try {
@@ -52,9 +58,9 @@ const Orders = ({ route , navigation}) => {
 
   const startProject = () => {
     if((location.latitude).toFixed(2) === (+orderDetails?.to_address?.latitude).toFixed(2) && (location.longitude).toFixed(2) === (+orderDetails?.to_address?.longitude).toFixed(2)){
-      return alert('You to reach to order location!...then start the project')
+      return alert('You are not at the order location!...then start the project')
     }
-    return navigation.push('upload-site-documents')
+    return navigation.push('upload-site-documents', {start: false})
   }
 
   const onScollFunction = () => {

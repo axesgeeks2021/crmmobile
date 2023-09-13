@@ -46,12 +46,10 @@ const Availability = () => {
             const auth = await AsyncStorage.getItem('auth')
             const parseAuth = JSON.parse(auth)
 
-
             let dates = "";
             createAvailableDates.map(ele => {
                 return dates += `${ele}, `
             })
-
 
             const myHeaders = new Headers();
             myHeaders.append("Authorization", `Token ${parseAuth?.token}`);

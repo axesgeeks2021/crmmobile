@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, useWindowDimensions, Modal } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Button, useTheme } from 'react-native-paper';
 
 
-const EditProfileView = () => {
+const EditProfileView = ({navigation}) => {
 
     const { width } = useWindowDimensions()
+    const theme = useTheme()
 
     const [showModal, setShowModal] = useState(false)
 
@@ -37,15 +38,15 @@ const EditProfileView = () => {
                 />
             </View>
             <View style={styles.form}>
-            <TextInput
-        editable
-        multiline
-        numberOfLines={4}
-        maxLength={40}
-        onChangeText={text => onChangeText(text)}
-        value={value}
-        style={{padding: 10}}
-      />
+                <TextInput
+                    editable
+                    multiline
+                    numberOfLines={4}
+                    maxLength={40}
+                    onChangeText={text => onChangeText(text)}
+                    value={value}
+                    style={{ padding: 10 }}
+                />
                 <Text style={styles.label}>Name</Text>
                 <TextInput
                     style={styles.input}
@@ -76,8 +77,8 @@ const EditProfileView = () => {
                     fontSize: 18, marginVertical: 5
 
 
-                }}>Don't have an account. Please Register Here</Text>
-                <Button onPress={() => setShowModal(true)} >Click Here</Button>
+                }}>Already have account. Please</Text>
+                <Button onPress={() => navigation.navigate('login')} mode='contained' style={{backgroundColor: theme.colors.darkGreen, borderRadius: 4}}>Click Here</Button>
             </View>
             <Modal transparent={false} visible={showModal}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
